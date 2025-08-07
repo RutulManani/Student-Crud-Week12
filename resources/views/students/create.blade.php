@@ -1,29 +1,37 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Add Student</title>
-</head>
-<body>
-    <h1>Add New Student</h1>
-    <form action="{{ route('students.store') }}" method="POST">
-        @csrf
-        <div>
-            <label for="fname">First Name:</label>
-            <input type="text" name="fname" id="fname" required>
-        </div>
-        
-        <div>
-            <label for="lname">Last Name:</label>
-            <input type="text" name="lname" id="lname" required>
-        </div>
-        
-        <div>
-            <label for="email">Email:</label>
-            <input type="email" name="email" id="email" required>
-        </div>
-        
-        <button type="submit">Save</button>
-    </form>
-    <a href="{{ route('students.index') }}">Back to List</a>
-</body>
-</html>
+@extends('layouts.admin')
+
+@section('content')
+<div class="card">
+    <div class="card-header">
+        <h2>Add New Student</h2>
+    </div>
+    <div class="card-body">
+        <form action="{{ route('students.store') }}" method="POST">
+            @csrf
+            <div class="mb-3">
+                <label for="fname" class="form-label">First Name</label>
+                <input type="text" class="form-control @error('fname') is-invalid @enderror" id="fname" name="fname" value="{{ old('fname') }}">
+                @error('fname')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
+            </div>
+            <div class="mb-3">
+                <label for="lname" class="form-label">Last Name</label>
+                <input type="text" class="form-control @error('lname') is-invalid @enderror" id="lname" name="lname" value="{{ old('lname') }}">
+                @error('lname')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
+            </div>
+            <div class="mb-3">
+                <label for="email" class="form-label">Email</label>
+                <input type="email" class="form-control @error('email') is-invalid @enderror" id="email" name="email" value="{{ old('email') }}">
+                @error('email')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+            <a href="{{ route('students.index') }}" class="btn btn-secondary">Cancel</a>
+        </form>
+    </div>
+</div>
+@endsection

@@ -4,64 +4,76 @@ namespace App\Http\Controllers;
 
 use App\Models\Student;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
 
 class StudentController extends Controller
 {
-    // Display all students
     public function index()
     {
         $students = Student::all();
         return view('students.index', compact('students'));
     }
 
-    // Show the form to create a new student
     public function create()
     {
         return view('students.create');
     }
 
-    // Store a new student
     public function store(Request $request)
     {
         $request->validate([
-            'fname' => 'required|string',
-            'lname' => 'required|string',
-            'email' => 'required|email',
+            'fname' => 'required|string|max:255',
+            'lname' => 'required|string|max:255',
+            'email' => 'required|email|unique:students,email',
         ]);
 
-        Student::create($request->all());
-        return redirect()->route('students.index');
+        try {
+            Student::create($request->all());
+            Session::flash('success', 'Student created successfully!');
+            return redirect()->route('students.index');
+        } catch (\Exception $e) {
+            Session::flash('error', 'Error creating student: ' . $e->getMessage());
+            return back()->withInput();
+        }
     }
 
-    // Display a specific student
     public function show(Student $student)
     {
         return view('students.show', compact('student'));
     }
 
-    // Show the form to edit a student
     public function edit(Student $student)
     {
         return view('students.edit', compact('student'));
     }
 
-    // Update a student
     public function update(Request $request, Student $student)
     {
         $request->validate([
-            'fname' => 'required|string',
-            'lname' => 'required|string',
-            'email' => 'required|email',
+            'fname' => 'required|string|max:255',
+            'lname' => 'required|string|max:255',
+            'email' => 'required|email|unique:students,email,' . $student->id,
         ]);
 
-        $student->update($request->all());
-        return redirect()->route('students.index');
+        try {
+            $student->update($request->all());
+            Session::flash('success', 'Student updated successfully!');
+            return redirect()->route('students.index');
+        } catch (\Exception $e) {
+            Session::flash('error', 'Error updating student: ' . $e->getMessage());
+            return back()->withInput();
+        }
     }
 
-    // Delete a student
     public function destroy(Student $student)
     {
-        $student->delete();
-        return redirect()->route('students.index');
+        try {
+            $student->delete();
+            Session::flash('success', 'Student deleted successfully!');
+            return redirect()->route('students.index');
+        } catch (\Exception $e) {
+            Session::flash('error', 'Error deleting student: ' . $e->getMessage());
+            return redirect()->route('students.index');
+        }
     }
 }
