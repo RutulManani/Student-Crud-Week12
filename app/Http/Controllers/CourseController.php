@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Course;
+use App\Models\Professor;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 
@@ -10,13 +11,14 @@ class CourseController extends Controller
 {
     public function index()
     {
-        $courses = Course::all();
+        $courses = Course::with(['professor', 'students'])->get();
         return view('courses.index', compact('courses'));
     }
 
     public function create()
     {
-        return view('courses.create');
+        $professors = Professor::all();
+        return view('courses.create', compact('professors'));
     }
 
     public function store(Request $request)
@@ -24,6 +26,7 @@ class CourseController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
+            'professor_id' => 'nullable|exists:professors,id',
         ]);
 
         try {
@@ -38,12 +41,15 @@ class CourseController extends Controller
 
     public function show(Course $course)
     {
+        $course->load(['professor', 'students']);
         return view('courses.show', compact('course'));
     }
 
     public function edit(Course $course)
     {
-        return view('courses.edit', compact('course'));
+        $professors = Professor::all();
+        $course->load('professor');
+        return view('courses.edit', compact('course', 'professors'));
     }
 
     public function update(Request $request, Course $course)
@@ -51,6 +57,7 @@ class CourseController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
+            'professor_id' => 'nullable|exists:professors,id',
         ]);
 
         try {
@@ -66,6 +73,7 @@ class CourseController extends Controller
     public function destroy(Course $course)
     {
         try {
+            $course->students()->detach();
             $course->delete();
             Session::flash('success', 'Course deleted successfully!');
             return redirect()->route('courses.index');

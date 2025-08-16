@@ -29,6 +29,17 @@
                     <div class="invalid-feedback">{{ $message }}</div>
                 @enderror
             </div>
+            <div class="mb-3">
+                <label class="form-label">Courses</label>
+                @foreach($courses as $course)
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="courses[]" value="{{ $course->id }}" id="course{{ $course->id }}">
+                        <label class="form-check-label" for="course{{ $course->id }}">
+                            {{ $course->name }}
+                        </label>
+                    </div>
+                @endforeach
+            </div>
             <button type="submit" class="btn btn-primary">Submit</button>
             <a href="{{ route('students.index') }}" class="btn btn-secondary">Cancel</a>
         </form>

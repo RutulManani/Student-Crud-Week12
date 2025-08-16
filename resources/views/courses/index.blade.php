@@ -15,6 +15,8 @@
                     <th>ID</th>
                     <th>Name</th>
                     <th>Description</th>
+                    <th>Professor</th>
+                    <th>Students Count</th>
                     <th>Actions</th>
                 </tr>
             </thead>
@@ -24,6 +26,8 @@
                     <td>{{ $course->id }}</td>
                     <td>{{ $course->name }}</td>
                     <td>{{ Str::limit($course->description, 50) }}</td>
+                    <td>{{ $course->professor ? $course->professor->name : 'None' }}</td>
+                    <td>{{ $course->students->count() }}</td>
                     <td>
                         <div class="btn-group" role="group">
                             <a href="{{ route('courses.show', $course->id) }}" class="btn btn-info btn-sm">View</a>

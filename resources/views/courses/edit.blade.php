@@ -23,6 +23,18 @@
                     <div class="invalid-feedback">{{ $message }}</div>
                 @enderror
             </div>
+            <div class="mb-3">
+                <label for="professor_id" class="form-label">Professor</label>
+                <select class="form-select @error('professor_id') is-invalid @enderror" id="professor_id" name="professor_id">
+                    <option value="">-- Select Professor --</option>
+                    @foreach($professors as $professor)
+                        <option value="{{ $professor->id }}" {{ old('professor_id', $course->professor_id) == $professor->id ? 'selected' : '' }}>{{ $professor->name }}</option>
+                    @endforeach
+                </select>
+                @error('professor_id')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
+            </div>
             <button type="submit" class="btn btn-primary">Update</button>
             <a href="{{ route('courses.index') }}" class="btn btn-secondary">Cancel</a>
         </form>

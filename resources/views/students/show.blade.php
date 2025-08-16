@@ -22,6 +22,14 @@
             <label class="form-label">Email</label>
             <p class="form-control-plaintext">{{ $student->email }}</p>
         </div>
+        <div class="mb-3">
+            <label class="form-label">Courses</label>
+            <ul>
+                @foreach($student->courses as $course)
+                    <li>{{ $course->name }}</li>
+                @endforeach
+            </ul>
+        </div>
         <div class="d-flex gap-2">
             <a href="{{ route('students.edit', $student->id) }}" class="btn btn-warning">Edit</a>
             <form action="{{ route('students.destroy', $student->id) }}" method="POST">

@@ -11,6 +11,7 @@
                 <tr>
                     <th>ID</th>
                     <th>Name</th>
+                    <th>Course</th>
                 </tr>
             </thead>
             <tbody>
@@ -18,6 +19,7 @@
                 <tr>
                     <td>{{ $professor->id }}</td>
                     <td>{{ $professor->name }}</td>
+                    <td>{{ $professor->course ? $professor->course->name : 'None' }}</td>
                 </tr>
                 @endforeach
             </tbody>

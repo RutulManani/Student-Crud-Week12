@@ -10,7 +10,7 @@ class ProfessorController extends Controller
 {
     public function index()
     {
-        $professors = Professor::all();
+        $professors = Professor::with('course')->get();
         return view('professors.index', compact('professors'));
     }
 }

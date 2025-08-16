@@ -18,6 +18,18 @@
             <label class="form-label">Description</label>
             <p class="form-control-plaintext">{{ $course->description }}</p>
         </div>
+        <div class="mb-3">
+            <label class="form-label">Professor</label>
+            <p class="form-control-plaintext">{{ $course->professor ? $course->professor->name : 'None' }}</p>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Students</label>
+            <ul>
+                @foreach($course->students as $student)
+                    <li>{{ $student->fname }} {{ $student->lname }}</li>
+                @endforeach
+            </ul>
+        </div>
         <div class="d-flex gap-2">
             <a href="{{ route('courses.edit', $course->id) }}" class="btn btn-warning">Edit</a>
             <form action="{{ route('courses.destroy', $course->id) }}" method="POST">
